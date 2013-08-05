@@ -16,7 +16,11 @@ MPC = mpc-1.0.1.tar.gz
 MPFR = mpfr-3.1.2.tar.bz2
 UCLIBC = uClibc-0.9.31.tar.bz2
 
-.PHONY: buildDir download
+BUSYBOXPATCH = busybox-1.21.0-config-1.patch
+IANAPATCH = iana-etc-2.30-update-1.patch
+IANAPATCH = uClibc-0.9.31-configs-2.patch
+
+.PHONY: buildDir download patches
 
 
 all: buildDir download
@@ -33,7 +37,7 @@ ${SRC}:
 
 
 
-download: ${SRC}/${BINUTILS} ${SRC}/${BUSYBOX} ${SRC}/${GCC} ${SRC}/${GMP} ${SRC}/${IANA} ${SRC}/${LINUX} ${SRC}/${MCP} ${SRC}/${MPFR} ${SRC}/${UCLIBC}
+download: ${SRC}/${BINUTILS} ${SRC}/${BUSYBOX} ${SRC}/${GCC} ${SRC}/${GMP} ${SRC}/${IANA} ${SRC}/${LINUX} ${SRC}/${MCP} ${SRC}/${MPFR} ${SRC}/${UCLIBC} patches
 
 ${SRC}/${BINUTILS}:
 	${WGET} -O ${SRC}/${BINUTILS} http://ftp.gnu.org/gnu/binutils/${BINUTILS}
@@ -61,3 +65,15 @@ ${SRC}/${MPFR}:
 
 ${SRC}/${UCLIBC}:
 	${WGET} -O ${SRC}/${UCLIBC} http://www.uclibc.org/downloads/${UCLIBC}
+
+
+patches: ${SRC}/${BUSYBOXPATCH} ${SRC}/${IANAPATCH} ${SRC}/${UCLIBCPATCH}
+
+${SRC}/${BUSYBOXPATCH}:
+	${WGET} -O ${SRC}/${BUSYBOXPATCH} http://patches.cross-lfs.org/embedded-dev/
+
+${SRC}/${IANAPATCH}:
+	${WGET} -O ${SRC}/${IANAPATCH}  http://patches.cross-lfs.org/embedded-dev/${IANAPATCH}
+
+${SRC}/${UCLIBCPATCH}:
+	${WGET} -O ${SRC}/${UCLIBCPATCH} http://patches.cross-lfs.org/embedded-dev/${UCLIBCPATCH}
