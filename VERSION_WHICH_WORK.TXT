@@ -1,0 +1,17 @@
+bash, versão 4.2.45(1)-release
+Binutils: (GNU Binutils for Ubuntu) 2.23.2
+bzip2,  Version 1.0.6, 6-Sept-2010.
+Coreutils:  8.20
+diff (GNU diffutils) 3.2
+find (GNU findutils) 4.4.2
+GNU Awk 4.0.1
+gcc (Ubuntu/Linaro 4.7.3-1ubuntu1) 4.7.3
+GNU C Library (Ubuntu EGLIBC 2.17-0ubuntu5) stable release version 2.17,
+grep (GNU grep) 2.14
+gzip 1.5
+GNU Make 3.81
+patch 2.6.1
+GNU sed versão 4.2.1
+Sudo versão 1.8.6p3
+tar (GNU tar) 1.26
+makeinfo (GNU texinfo) 4.13
