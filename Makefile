@@ -20,12 +20,16 @@ BUSYBOXPATCH = busybox-1.21.0-config-1.patch
 IANAPATCH = iana-etc-2.30-update-1.patch
 IANAPATCH = uClibc-0.9.31-configs-2.patch
 
-.PHONY: buildDir download patches environment
+.PHONY: buildDir download patches environment fileSystem crossDir
 
 
-all: buildDir download
+all: buildDir download crossDir
 
 buildDir: ${CLFS} ${SRC}
+
+crossDir: ${CLFS}
+	install -dv ${CLFS}/cross-tools/include
+	install -dv ${CLFS}/cross-tools/bin
 
 ${CLFS}:
 	${MKDIR_P} ${CLFS}
@@ -35,7 +39,9 @@ ${SRC}:
 	${MKDIR_P} ${SRC}
 	${CHMODAWT} ${SRC}
 
-
+# Must be run after make environment:
+fileSystem: buildDir create_file_system.sh
+	./create_file_system.sh
 
 download: ${SRC}/${BINUTILS} ${SRC}/${BUSYBOX} ${SRC}/${GCC} ${SRC}/${GMP} ${SRC}/${IANA} ${SRC}/${LINUX} ${SRC}/${MCP} ${SRC}/${MPFR} ${SRC}/${UCLIBC} patches
 
