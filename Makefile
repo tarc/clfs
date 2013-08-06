@@ -20,7 +20,7 @@ BUSYBOXPATCH = busybox-1.21.0-config-1.patch
 IANAPATCH = iana-etc-2.30-update-1.patch
 IANAPATCH = uClibc-0.9.31-configs-2.patch
 
-.PHONY: buildDir download patches
+.PHONY: buildDir download patches environment
 
 
 all: buildDir download
@@ -77,3 +77,17 @@ ${SRC}/${IANAPATCH}:
 
 ${SRC}/${UCLIBCPATCH}:
 	${WGET} -O ${SRC}/${UCLIBCPATCH} http://patches.cross-lfs.org/embedded-dev/${UCLIBCPATCH}
+
+
+environment: ${CLFS}/.bashrc
+	exec env -i HOME=$(shell pwd)/${CLFS} TERM=${TERM} /bin/bash
+
+${CLFS}/.bashrc:
+	echo "set +h;\
+	umask 022;\
+	CLFS=$(shell pwd)/${CLFS};\
+	LC_ALL=POSIX;\
+	PATH=$(shell pwd)/${CLFS}/cross-tools/bin:/bin:/usr/bin;\
+	export CLFS LC_ALL PATH;\
+	PS1='\u:\w\$$ '" > ${CLFS}/.bashrc
+
