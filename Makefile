@@ -39,7 +39,7 @@ ${SRC}:
 	${MKDIR_P} ${SRC}
 	${CHMODAWT} ${SRC}
 
-# Must be run after make environment:
+# Must be run after run "make environment":
 fileSystem: buildDir create_file_system.sh
 	./create_file_system.sh
 
