@@ -1,11 +1,10 @@
+# Aliases
 MKDIR_P = mkdir -p
 CHMOD777 = chmod 777
 CHMODAWT = chmod -v a+wt
 WGET = wget -c
 
-CLFS = build
-SRC = build/src
-
+# Packages to download
 BINUTILS = binutils-2.23.2.tar.bz2
 BUSYBOX = busybox-1.21.0.tar.bz2
 GCC = gcc-4.7.3.tar.bz2
@@ -16,20 +15,25 @@ MPC = mpc-1.0.1.tar.gz
 MPFR = mpfr-3.1.2.tar.bz2
 UCLIBC = uClibc-0.9.31.tar.bz2
 
+# Patches
 BUSYBOXPATCH = busybox-1.21.0-config-1.patch
 IANAPATCH = iana-etc-2.30-update-1.patch
 IANAPATCH = uClibc-0.9.31-configs-2.patch
 
-.PHONY: buildDir download patches environment fileSystem crossDir
+.PHONY: buildDir download patches environment fileSystem crossDir directories
+
+all: directories download
 
 
-all: buildDir download crossDir
+
+# Directories
+
+CLFS = build
+SRC = build/src
+
+directories: buildDir crossDir
 
 buildDir: ${CLFS} ${SRC}
-
-crossDir: ${CLFS}
-	install -dv ${CLFS}/cross-tools/include
-	install -dv ${CLFS}/cross-tools/bin
 
 ${CLFS}:
 	${MKDIR_P} ${CLFS}
@@ -39,9 +43,26 @@ ${SRC}:
 	${MKDIR_P} ${SRC}
 	${CHMODAWT} ${SRC}
 
+
+crossDir: ${CLFS}/cross-tools/include ${CLFS}/cross-tools/bin
+
+${CLFS}/cross-tools/include: ${CLFS}
+	install -dv ${CLFS}/cross-tools/include
+
+${CLFS}/cross-tools/bin: ${CLFS}
+	install -dv ${CLFS}/cross-tools/bin
+
+
+# Filesystem structure
+
+
+
 # Must be run after run "make environment":
 fileSystem: buildDir create_file_system.sh
 	./create_file_system.sh
+
+
+
 
 download: ${SRC}/${BINUTILS} ${SRC}/${BUSYBOX} ${SRC}/${GCC} ${SRC}/${GMP} ${SRC}/${IANA} ${SRC}/${LINUX} ${SRC}/${MCP} ${SRC}/${MPFR} ${SRC}/${UCLIBC} patches
 
@@ -96,4 +117,9 @@ ${CLFS}/.bashrc:
 	PATH=$(shell pwd)/${CLFS}/cross-tools/bin:/bin:/usr/bin;\
 	export CLFS LC_ALL PATH;\
 	PS1='\u:\w\$$ '" > ${CLFS}/.bashrc
+
+
+
+${CLFS}/etc/mtab: ${CLFS}
+	ln -svf /proc/mounts ${CLFS}/etc/mtab
 
