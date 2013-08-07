@@ -20,7 +20,7 @@ BUSYBOXPATCH = busybox-1.21.0-config-1.patch
 IANAPATCH = iana-etc-2.30-update-1.patch
 IANAPATCH = uClibc-0.9.31-configs-2.patch
 
-.PHONY: buildDir download patches environment fileSystem crossDir directories
+.PHONY: buildDir download patches environment fileSystem crossDir directories system
 
 all: directories download
 
@@ -54,12 +54,20 @@ ${CLFS}/cross-tools/bin: ${CLFS}
 
 
 # Filesystem structure
+# (Must be run inside 'make environment'):
 
 
+system: fileSystem ${CLFS}/etc/mtab
 
-# Must be run after run "make environment":
-fileSystem: buildDir create_file_system.sh
+
+fileSystem: FILESYSTEM_CREATED
+
+
+FILESYSTEM_CREATED: ${CLFS}
 	./create_file_system.sh
+
+${CLFS}/etc/mtab: fileSystem /proc/mounts
+	ln -svf /proc/mounts ${CLFS}/etc/mtab
 
 
 
@@ -119,7 +127,4 @@ ${CLFS}/.bashrc:
 	PS1='\u:\w\$$ '" > ${CLFS}/.bashrc
 
 
-
-${CLFS}/etc/mtab: ${CLFS}
-	ln -svf /proc/mounts ${CLFS}/etc/mtab
 

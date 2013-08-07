@@ -11,5 +11,6 @@ mkdir -pv ${CLFS}/usr/{,local/}share/{doc,info,locale,man}
 mkdir -pv ${CLFS}/usr/{,local/}share/{misc,terminfo,zoneinfo}
 mkdir -pv ${CLFS}/usr/{,local/}share/man/man{1,2,3,4,5,6,7,8}
 for dir in ${CLFS}/usr{,/local}; do
-    ln -sv share/{man,doc,info} ${dir}
+    [[ -a $dir ]] || ln -sv share/{man,doc,info} ${dir}
 done
+touch FILESYSTEM_CREATED
