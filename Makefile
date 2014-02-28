@@ -20,9 +20,12 @@ BUSYBOXPATCH = busybox-1.21.0-config-1.patch
 IANAPATCH = iana-etc-2.30-update-1.patch
 IANAPATCH = uClibc-0.9.31-configs-2.patch
 
-.PHONY: buildDir download patches environment fileSystem crossDir directories system
+.PHONY: buildDir download patches environment fileSystem crossDir directories system teste
 
 all: directories download
+
+teste:
+	echo oi{1,2,3}
 
 
 
